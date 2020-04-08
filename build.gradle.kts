@@ -36,11 +36,25 @@ allprojects {
     }
 
     dependencies {
+
+//        implementation("ch.qos.logback:logback-classic:$logback_version")
+
+        //jackson
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version")
+        implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version")
+//        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
+
+//        testImplementation("org.amshove.kluent:kluent:$kluent_version")
+//        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spek_version")
+//
+//        testRuntime("org.spekframework.spek2:spek-runner-junit5:$spek_version")
+
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
         implementation("io.ktor:ktor-server-cio:$ktor_version")
         implementation("ch.qos.logback:logback-classic:$logback_version")
         implementation("io.ktor:ktor-server-core:$ktor_version")
         implementation("io.ktor:ktor-server-host-common:$ktor_version")
+        implementation("io.ktor:ktor-jackson:$ktor_version")
         testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     }
 
