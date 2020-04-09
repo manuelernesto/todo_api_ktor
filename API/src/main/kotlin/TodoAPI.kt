@@ -5,10 +5,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.routing.*
 import java.time.LocalDate
 
 fun Routing.todoAPI() {
@@ -30,16 +27,53 @@ fun Routing.todoAPI() {
         post("/todo") {
             val todo = call.receive<Todo>()
             val newTodo = Todo(
-                todos.size + 1,
-                todo.title,
-                todo.details,
-                todo.assignedTo,
-                todo.dueData,
-                todo.importance
+                todos.size + 1, todo.title, todo.details, todo.assignedTo, todo.dueData, todo.importance
             )
             todos = todos + todo
-
             call.respond(HttpStatusCode.Created, todos)
+        }
+
+        put("/todo/{id}") {
+            val id: String? = call.parameters["id"]
+
+            if (id == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@put
+            }
+
+            val todoFound = todos.getOrNull(id.toInt())
+
+            if (todoFound == null) {
+                call.respond(HttpStatusCode.NotFound)
+                return@put
+            }
+
+            val todo = call.receive<Todo>()
+            todos = todos.filter { it.id != todo.id }
+            todos = todos + todo
+
+            call.respond(HttpStatusCode.NoContent)
+        }
+
+        delete("/todo/{id}") {
+            val id: String? = call.parameters["id"]
+
+            if (id == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+            }
+
+            val todoFound = todos.getOrNull(id.toInt())
+
+            if (todoFound == null) {
+                call.respond(HttpStatusCode.NotFound)
+                return@delete
+            }
+
+            val todo = call.receive<Todo>()
+            todos = todos.filter { it.id != todo.id }
+
+            call.respond(HttpStatusCode.NoContent)
         }
     }
 }
