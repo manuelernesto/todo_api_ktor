@@ -24,5 +24,6 @@ dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-host-common:$ktor_version")
     implementation("io.ktor:ktor-jackson:$ktor_version")
+
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }

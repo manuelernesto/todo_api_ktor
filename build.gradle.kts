@@ -1,3 +1,5 @@
+import com.sun.org.apache.regexp.internal.RETest.test
+
 val logback_version: String by project
 val kotlin_version: String by project
 val ktor_version: String by project
@@ -55,7 +57,11 @@ allprojects {
         implementation("io.ktor:ktor-server-core:$ktor_version")
         implementation("io.ktor:ktor-server-host-common:$ktor_version")
         implementation("io.ktor:ktor-jackson:$ktor_version")
-        testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+
+
+        testImplementation("org.amshove.kluent:kluent:$kluent_version")
+        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spek_version")
+        testRuntime("org.spekframework.spek2:spek-runner-junit5:$spek_version")
     }
 
     tasks.withType<Test> {
@@ -63,6 +69,7 @@ allprojects {
             includeEngines("spek2")
         }
     }
+
 
 }
 subprojects {
