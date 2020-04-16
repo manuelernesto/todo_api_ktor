@@ -1,0 +1,38 @@
+body {
+    background-color: #fafafa;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.date {
+    color: #333;
+    margin-left: 5px;
+    font-size: 11px;
+    padding: 1px 0;
+    height: 15px;
+    display: block;
+}
+
+.todos-container {
+    background-color: white;
+}
+
+.container {
+    min-height:100%;
+    overflow: hidden;
+}
+
+#col1, #col2, #col3 {
+    margin-bottom: -100%;
+    padding-bottom: 100%;
+}
+
+.login-modal .modal-content {
+    width: 300px;
+}
+
+.link {
+    cursor: pointer;
+}

@@ -76,7 +76,16 @@ subprojects {
     version = "1.0"
 }
 
+project(":Shared") {
+}
+
 project(":API") {
+    dependencies {
+        implementation(project(":Shared"))
+    }
+}
+
+project(":WEB") {
     dependencies {
         implementation(project(":Shared"))
     }

@@ -1,0 +1,16 @@
+{{<base}}
+    {{$header}}
+        {{<header}}
+            {{$title}}Todos{{/title}}
+        {{/header}}
+    {{/header}}
+
+    {{$content}}
+        <h1>Hello - {{ todos.userName }}</h1>
+        <ul>
+            {{#todos.todoItems}}
+                <li>{{title}}</li>
+            {{/todos.todoItems}}
+        </ul>
+    {{/content}}
+{{/base}}

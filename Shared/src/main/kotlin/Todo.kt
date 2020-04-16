@@ -1,4 +1,4 @@
-package io.github.manuelernesto
+package io.github.manuelernesto.shared
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
