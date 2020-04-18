@@ -1,6 +1,9 @@
 package io.github.manuelernesto
 
+import TodoListRepositorySQL
 import com.fasterxml.jackson.databind.SerializationFeature
+import io.github.manuelernesto.Service.TodoService
+import io.github.manuelernesto.Service.TodoServiceImpl
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -12,10 +15,14 @@ import io.ktor.jackson.jackson
 fun main(args: Array<String>): Unit = io.ktor.server.cio.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
+fun Application.module(testing: Boolean = true) {
+    val service = TodoServiceImpl(TodoListRepositorySQL())
+    moduleWithDependency(service)
+}
+
+fun Application.moduleWithDependency(service: TodoService) {
     install(Routing) {
-        todoAPI()
+        todoAPI(service)
     }
 
     install(StatusPages) {

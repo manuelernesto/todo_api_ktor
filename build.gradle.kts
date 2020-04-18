@@ -82,11 +82,23 @@ project(":Shared") {
 project(":API") {
     dependencies {
         implementation(project(":Shared"))
+        implementation(project(":Service"))
+        implementation(project(":Repository"))
     }
 }
 
 project(":WEB") {
     dependencies {
         implementation(project(":Shared"))
+    }
+}
+
+project(":Repository") {
+
+}
+project(":Service") {
+    dependencies {
+        implementation(project(":Shared"))
+        implementation(project(":Repository"))
     }
 }
