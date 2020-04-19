@@ -2,6 +2,7 @@ package io.github.manuelernesto
 
 import TodoListRepositorySQL
 import com.fasterxml.jackson.databind.SerializationFeature
+import io.github.manuelernesto.Repository.TodoListRepository
 import io.github.manuelernesto.Service.TodoService
 import io.github.manuelernesto.Service.TodoServiceImpl
 import io.ktor.application.*
@@ -11,12 +12,23 @@ import io.ktor.http.*
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.StatusPages
 import io.ktor.jackson.jackson
+import org.koin.dsl.module.module
+import org.koin.ktor.ext.inject
+import org.koin.standalone.StandAloneContext
 
-fun main(args: Array<String>): Unit = io.ktor.server.cio.EngineMain.main(args)
+val todoAppModule = module {
+    single<TodoService> { TodoServiceImpl(get()) }
+    single<TodoListRepository> { TodoListRepositorySQL() }
+}
+
+fun main(args: Array<String>) {
+    StandAloneContext.startKoin(listOf(todoAppModule))
+    io.ktor.server.cio.EngineMain.main(args)
+}
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.module(testing: Boolean = false) {
-    val service = TodoServiceImpl(TodoListRepositorySQL())
+    val service: TodoService by inject()
     moduleWithDependency(service)
 }
 

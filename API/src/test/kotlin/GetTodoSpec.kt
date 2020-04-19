@@ -86,7 +86,7 @@ object GetTodoSpec : Spek({
                     response
                         .content
                         .shouldNotBeNull()
-                        .shouldContain("Python")
+                        .shouldContain("database")
                 }
             }
 
