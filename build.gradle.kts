@@ -39,17 +39,9 @@ allprojects {
 
     dependencies {
 
-//        implementation("ch.qos.logback:logback-classic:$logback_version")
-
         //jackson
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version")
         implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version")
-//        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
-
-//        testImplementation("org.amshove.kluent:kluent:$kluent_version")
-//        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spek_version")
-//
-//        testRuntime("org.spekframework.spek2:spek-runner-junit5:$spek_version")
 
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
         implementation("io.ktor:ktor-server-cio:$ktor_version")
@@ -75,14 +67,32 @@ allprojects {
 subprojects {
     version = "1.0"
 }
+project(":Repository") {
+    dependencies {
+        implementation(project(":Shared"))
+    }
+}
 
 project(":Shared") {
+}
+
+project(":Service") {
+    dependencies {
+        implementation(project(":Shared"))
+    }
+}
+
+project(":DataAccess") {
+    dependencies {
+        implementation(project(":Shared"))
+        implementation(project(":Repository"))
+    }
 }
 
 project(":API") {
     dependencies {
         implementation(project(":Shared"))
-        implementation(project(":Service"))
+        implementation(project(":DataAccess"))
         implementation(project(":Repository"))
     }
 }
@@ -90,15 +100,10 @@ project(":API") {
 project(":WEB") {
     dependencies {
         implementation(project(":Shared"))
+        implementation(project(":Service"))
+        implementation(project(":API"))
     }
 }
 
-project(":Repository") {
 
-}
-project(":Service") {
-    dependencies {
-        implementation(project(":Shared"))
-        implementation(project(":Repository"))
-    }
-}
+

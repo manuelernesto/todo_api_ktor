@@ -2,9 +2,9 @@ package io.github.manuelernesto
 
 import TodoListRepositorySQL
 import com.fasterxml.jackson.databind.SerializationFeature
+import io.github.manuelernesto.DataAcess.TodoService
+import io.github.manuelernesto.DataAcess.TodoServiceImpl
 import io.github.manuelernesto.Repository.TodoListRepository
-import io.github.manuelernesto.Service.TodoService
-import io.github.manuelernesto.Service.TodoServiceImpl
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*

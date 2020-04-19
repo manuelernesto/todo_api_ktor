@@ -1,9 +1,9 @@
-package io.github.manuelernesto.Service
+package io.github.manuelernesto.DataAcess
 
 import io.github.manuelernesto.shared.Todo
 
 interface TodoService {
-    suspend fun getAll(): List<Todo>
+    fun getAll(): List<Todo>
     fun getTodo(id: Int): Todo
     fun delete(id: Int): Boolean
     fun create(todo: Todo): Boolean

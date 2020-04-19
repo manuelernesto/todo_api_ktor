@@ -1,6 +1,7 @@
 package io.github.manuelernesto.web
 
 
+import io.github.manuelernesto.Service.TodoService
 import io.github.manuelernesto.shared.Importance
 import io.github.manuelernesto.shared.Todo
 import io.github.manuelernesto.web.viewmodels.TodoVM
@@ -15,16 +16,19 @@ val todo = Todo(
     1,
     "Add database processing",
     "Add backend support to this code",
-    "Ernesto",
-    LocalDate.of(2020, 4, 18),
+    "Kevin",
+    LocalDate.of(2018, 12, 18),
     Importance.HIGH
 )
 
 var todos = listOf(todo, todo)
 
-fun Routing.todos() {
+fun Routing.todos(service: TodoService) {
+
+
     get("/todo") {
 
+//        val todos = service.getAll()
         val vm = TodoVM(todos)
 
         call.respond(

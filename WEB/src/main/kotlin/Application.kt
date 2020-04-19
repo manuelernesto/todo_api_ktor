@@ -1,6 +1,8 @@
 package io.github.manuelernesto.web
 
 import com.github.mustachejava.DefaultMustacheFactory
+import io.github.manuelernesto.Service.TodoService
+import io.github.manuelernesto.Service.TodoServiceImpl
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -14,14 +16,26 @@ import io.ktor.routing.Routing
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import org.koin.dsl.module.module
+import org.koin.ktor.ext.inject
+import org.koin.standalone.StandAloneContext
 
+val todoAppModule = module {
+    single<TodoService> { TodoServiceImpl() }
+}
 
 fun main(args: Array<String>) {
+    StandAloneContext.startKoin(listOf(todoAppModule))
     embeddedServer(Netty, commandLineEnvironment(args)).start()
 }
 
 @Suppress("unused")
 fun Application.module() {
+    val service: TodoService by inject()
+    moduleWithDependency(service)
+}
+
+fun Application.moduleWithDependency(service: TodoService) {
     install(StatusPages) {
         when {
             isDev -> {
@@ -53,7 +67,7 @@ fun Application.module() {
             application.log.trace(it.buildText())
         }
 
-        todos()
+        todos(service)
         staticResources()
     }
 }

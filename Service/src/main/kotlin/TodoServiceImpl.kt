@@ -1,33 +1,25 @@
 package io.github.manuelernesto.Service
 
-import io.github.manuelernesto.Repository.TodoListRepository
-import io.github.manuelernesto.shared.Importance
 import io.github.manuelernesto.shared.Todo
-import java.time.LocalDate
+import io.ktor.client.HttpClient
+import io.ktor.client.features.json.JacksonSerializer
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.request.get
 
-val todo1 = Todo(
-    1,
-    "Learn Kotlin Today",
-    "Learn more about The best language",
-    "Manuel Ernesto",
-    LocalDate.of(2020, 4, 8),
-    Importance.HIGH
-)
-val todo2 = Todo(
-    2,
-    "Learn Python",
-    "Another great language",
-    "Manuel Ernesto",
-    LocalDate.of(2020, 4, 9),
-    Importance.MEDIUM
-)
+class TodoServiceImpl : TodoService {
 
-var todos = listOf(todo1, todo2)
+    private val client = HttpClient {
+        install(JsonFeature) {
+            serializer = JacksonSerializer()
+        }
+    }
+    private val endpoint = "http://0.0.0.0:8081/api/todo"
 
-class TodoServiceImpl(val todoListRepository: TodoListRepository) : TodoService {
+    override suspend fun getAll(): List<Todo> = client.get(endpoint)
 
-    override fun getAll() = todos
-    override fun getTodo(id: Int) = todos[id]
+    override fun getTodo(id: Int): Todo {
+        TODO("Not yet implemented")
+    }
 
     override fun delete(id: Int): Boolean {
         TODO("Not yet implemented")
