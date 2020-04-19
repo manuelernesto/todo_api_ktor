@@ -3,6 +3,7 @@ package io.github.manuelernesto
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.github.manuelernesto.Service.TodoService
 import io.github.manuelernesto.shared.Importance
 import io.github.manuelernesto.shared.Todo
 import io.ktor.config.MapApplicationConfig
@@ -14,6 +15,9 @@ import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.createTestEnvironment
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
+import io.mockk.clearMocks
+import io.mockk.every
+import io.mockk.mockk
 import org.amshove.kluent.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -41,13 +45,21 @@ object GetTodoSpec : Spek({
             }
         }
 
-        engine.application.module(true)
+        val mockTodoService = mockk<TodoService>()
+
+        beforeEachTest {
+            clearMocks(mockTodoService)
+        }
+
+        engine.application.moduleWithDependency(mockTodoService)
         val mapper = jacksonObjectMapper()
             .registerModule(JavaTimeModule())
 
         with(engine) {
 
             it("should create a todo") {
+                every { mockTodoService.create(any()) } returns true
+
                 with(handleRequest(HttpMethod.Post, "/api/todo") {
                     addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                     setBody(mapper.writeValueAsString(todo))
@@ -57,14 +69,20 @@ object GetTodoSpec : Spek({
             }
 
             it("Should be ok to get the list of the TODOS") {
-                handleRequest(HttpMethod.Get, "/api/todo/0").apply {
+
+                every { mockTodoService.getAll() } returns listOf(todo, todo)
+
+                handleRequest(HttpMethod.Get, "/api/todo").apply {
                     response.status().`should be`(HttpStatusCode.OK)
                 }
 
             }
 
             it("should get the todos") {
-                with(handleRequest(HttpMethod.Get, "/api/todo/1")) {
+
+                every { mockTodoService.getTodo(1) } returns todo
+
+                with(handleRequest(HttpMethod.Get, "/api/todo")) {
                     response
                         .content
                         .shouldNotBeNull()
@@ -74,6 +92,7 @@ object GetTodoSpec : Spek({
 
 
             it("should update the todos") {
+                every { mockTodoService.update(any(), any()) } returns true
                 with(handleRequest(HttpMethod.Put, "/api/todo/1") {
                     addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                     setBody(mapper.writeValueAsString(todo))
@@ -83,13 +102,14 @@ object GetTodoSpec : Spek({
             }
 
             it("should delete the todos") {
+                every { mockTodoService.delete(any()) } returns true
                 with(handleRequest(HttpMethod.Delete, "/api/todo/1")) {
                     response.status().`should be`(HttpStatusCode.NoContent)
                 }
             }
 
             it("should get the todo if the id is set") {
-
+                every { mockTodoService.getTodo(1) } returns todo
                 with(handleRequest(HttpMethod.Get, "/api/todo/1")) {
                     response.content
                         .shouldNotBeNull()
@@ -98,7 +118,7 @@ object GetTodoSpec : Spek({
             }
 
             it("should return an error if the id is invalid") {
-
+                every { mockTodoService.getTodo(1) } throws Exception()
                 with(handleRequest(HttpMethod.Get, "/api/todo/3")) {
                     response.status().shouldEqual(HttpStatusCode.NotFound)
                 }

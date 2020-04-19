@@ -15,7 +15,7 @@ import io.ktor.jackson.jackson
 fun main(args: Array<String>): Unit = io.ktor.server.cio.EngineMain.main(args)
 
 @Suppress("unused") // Referenced in application.conf
-fun Application.module(testing: Boolean = true) {
+fun Application.module(testing: Boolean = false) {
     val service = TodoServiceImpl(TodoListRepositorySQL())
     moduleWithDependency(service)
 }
